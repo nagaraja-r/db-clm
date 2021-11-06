@@ -1,5 +1,10 @@
 package com.db.task.dbclm.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +17,10 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "nomenclature_economic_activities")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class NomenclatureEconomicActivity implements Serializable {
     @Id
     @GeneratedValue

@@ -1,14 +1,14 @@
 package com.db.task.dbclm;
 
-import com.db.task.dbclm.dto.NomenclatureEconomicActivity;
+import com.db.task.dbclm.dto.NomenclatureEconomicActivityDto;
 
 public final class NaceDataHelper {
 
-    public static NomenclatureEconomicActivity NACE_398481;
-    public static NomenclatureEconomicActivity NACE_398488;
+    public static NomenclatureEconomicActivityDto NACE_398481;
+    public static NomenclatureEconomicActivityDto NACE_398488;
 
     static {
-        NACE_398481 = NomenclatureEconomicActivity.builder()
+        NACE_398481 = NomenclatureEconomicActivityDto.builder()
                 .order(398481L)
                 .level(1)
                 .code("A")
@@ -23,7 +23,7 @@ public final class NaceDataHelper {
                 .build();
 
 
-        NACE_398488 = NomenclatureEconomicActivity.builder()
+        NACE_398488 = NomenclatureEconomicActivityDto.builder()
                 .order(398488L)
                 .level(4)
                 .code("1.15")

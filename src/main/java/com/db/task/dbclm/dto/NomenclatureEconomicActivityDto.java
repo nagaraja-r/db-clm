@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -11,7 +12,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Getter
-public class NomenclatureEconomicActivity implements Serializable {
+@Setter
+public class NomenclatureEconomicActivityDto implements Serializable {
     private Long order;
     private Integer level;
     private String code;
