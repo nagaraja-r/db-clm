@@ -1,6 +1,7 @@
 package com.db.task.dbclm.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 public class NomenclatureEconomicActivity implements Serializable {
     private Long order;

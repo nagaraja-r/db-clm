@@ -28,8 +28,7 @@ public class DbClmController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation",
                     content = @Content(schema = @Schema(implementation = NomenclatureEconomicActivity.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid Input"),
-            @ApiResponse(responseCode = "404", description = "No records found")})
+            @ApiResponse(responseCode = "400", description = "Invalid Input")})
     @GetMapping(value = "/nomenclatures/{order}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<NomenclatureEconomicActivity> getNaceDetailsBy(@Parameter(description = "Order Id",
             required = true) final @PathVariable Long order) {
