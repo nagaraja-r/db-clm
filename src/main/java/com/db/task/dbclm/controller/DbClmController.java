@@ -1,6 +1,7 @@
 package com.db.task.dbclm.controller;
 
 import com.db.task.dbclm.dto.NomenclatureEconomicActivityDto;
+import com.db.task.dbclm.exception.NaceDataNotFoundException;
 import com.db.task.dbclm.service.DbClmService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,11 +38,12 @@ public class DbClmController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation",
                     content = @Content(schema = @Schema(implementation = NomenclatureEconomicActivityDto.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid Input")})
+            @ApiResponse(responseCode = "400", description = "Invalid Input"),
+            @ApiResponse(responseCode = "404", description = "No NACE data found")})
     @GetMapping(value = "/nomenclatures/{order}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<NomenclatureEconomicActivityDto> getNaceDetailsBy(@Parameter(description = "Order Id",
-            required = true) final @PathVariable Long order) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            required = true) final @PathVariable Long order) throws NaceDataNotFoundException {
+        return ResponseEntity.ok(dbClmService.getNaceDetailsByOrder(order));
     }
 
     @Operation(summary = "Creates a NACE record", description = "Creates a new NACE record",

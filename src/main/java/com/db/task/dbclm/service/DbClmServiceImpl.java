@@ -2,15 +2,12 @@ package com.db.task.dbclm.service;
 
 import com.db.task.dbclm.dto.NomenclatureEconomicActivityDto;
 import com.db.task.dbclm.exception.InvalidNaceDataException;
+import com.db.task.dbclm.exception.NaceDataNotFoundException;
 import com.db.task.dbclm.mapper.NomenclatureEconomicActivityMapper;
-import com.db.task.dbclm.model.NomenclatureEconomicActivity;
 import com.db.task.dbclm.repository.DbClmRepository;
 import com.db.task.dbclm.util.NaceDataValidator;
-import com.db.task.dbclm.util.ValidationRules;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -24,10 +21,27 @@ public class DbClmServiceImpl implements DbClmService {
     }
 
     @Override
+    public NomenclatureEconomicActivityDto getNaceDetailsByOrder(final Long theOrder) throws NaceDataNotFoundException {
+        if (theOrder == null) {
+            throw new IllegalArgumentException("The order must not be null");
+        }
+        log.info("Finding the NACE for the given order: {}", theOrder);
+
+        var theNace = dbClmRepository.findByOrder(theOrder);
+
+        if (theNace.isPresent()) {
+            log.info("Found the NACE for a  given order: {}", theOrder);
+            return mapper.toDto(theNace.get());
+        }
+
+        throw new NaceDataNotFoundException("No NACE found for the given order:" + theOrder);
+    }
+
+    @Override
     public NomenclatureEconomicActivityDto putNaceDetails(final NomenclatureEconomicActivityDto newNaceDto) {
         validateNaceData(newNaceDto);
         log.info("the new NACE is valid");
-        final NomenclatureEconomicActivity naceBo = mapper.toBo(newNaceDto);
+        final var naceBo = mapper.toBo(newNaceDto);
         log.info("persisiting the NACE with order : {}", naceBo.getOrder());
         return mapper.toDto(dbClmRepository.save(naceBo));
     }
@@ -39,8 +53,8 @@ public class DbClmServiceImpl implements DbClmService {
      * @param theNace
      */
     private void validateNaceData(final NomenclatureEconomicActivityDto theNace) {
-        NaceDataValidator naceDataValidator = new NaceDataValidator();
-        Optional<ValidationRules> rule = naceDataValidator.validate(theNace);
+        var naceDataValidator = new NaceDataValidator();
+        var rule = naceDataValidator.validate(theNace);
 
         InvalidNaceDataException.throwIf(rule.isPresent(), rule);
     }
