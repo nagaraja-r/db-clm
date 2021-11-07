@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 
@@ -29,12 +28,12 @@ public class DbClmControllerIT {
 
     @Test
     public void testPutNaceDetails_NACE_Created() {
-        NomenclatureEconomicActivityDto nace = NaceDataHelper.NACE_398488;
-        ResponseEntity<NomenclatureEconomicActivityDto> response = this.restTemplate.postForEntity(nace_uri,
+        var nace = NaceDataHelper.NACE_398488;
+        var response = this.restTemplate.postForEntity(nace_uri,
                 nace,
                 NomenclatureEconomicActivityDto.class);
 
-        NomenclatureEconomicActivityDto naceResponse = response.getBody();
+        var naceResponse = response.getBody();
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(naceResponse);
         assertEquals(nace.getOrder(), naceResponse.getOrder());
@@ -45,8 +44,8 @@ public class DbClmControllerIT {
 
     @Test
     public void testPutNaceDetails_InvalidInput() {
-        NomenclatureEconomicActivityDto invalidNace = new NomenclatureEconomicActivityDto();
-        ResponseEntity<ApiError> response = this.restTemplate.postForEntity(nace_uri,
+        var invalidNace = new NomenclatureEconomicActivityDto();
+        var response = this.restTemplate.postForEntity(nace_uri,
                 invalidNace,
                 ApiError.class);
 
@@ -55,7 +54,7 @@ public class DbClmControllerIT {
 
     @Test
     public void testGetNaceDetails_NACE_Found() {
-        Long order = 398488L;
+        var order = 398488L;
         ResponseEntity<NomenclatureEconomicActivityDto> response = this.restTemplate.getForEntity(nace_uri + order,
                 NomenclatureEconomicActivityDto.class);
 
@@ -71,12 +70,19 @@ public class DbClmControllerIT {
 
     @Test
     public void testGetNaceDetails_NACE_NotFound() {
-        Long order = 123466L;
-        ResponseEntity<NomenclatureEconomicActivityDto> response = this.restTemplate.getForEntity(nace_uri + order,
-                NomenclatureEconomicActivityDto.class);
+        var order = 123466L;
+        ResponseEntity<ApiError> response = this.restTemplate.getForEntity(nace_uri + order,
+                ApiError.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        NomenclatureEconomicActivityDto naceResponse = response.getBody();
-        assertNull(naceResponse);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void testGetNaceDetails_InvalidInput() {
+        var order = "invalidinput";
+        ResponseEntity<ApiError> response = this.restTemplate.getForEntity(nace_uri+order,
+                ApiError.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 }
