@@ -7,6 +7,7 @@ import com.db.task.dbclm.mapper.NomenclatureEconomicActivityMapper;
 import com.db.task.dbclm.repository.DbClmRepository;
 import com.db.task.dbclm.util.NaceDataValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +22,7 @@ public class DbClmServiceImpl implements DbClmService {
     }
 
     @Override
+    @Cacheable("naceData")
     public NomenclatureEconomicActivityDto getNaceDetailsByOrder(final Long theOrder) throws NaceDataNotFoundException {
         if (theOrder == null) {
             throw new IllegalArgumentException("The order must not be null");

@@ -56,7 +56,7 @@ public class DbClmController {
             MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<NomenclatureEconomicActivityDto> putNaceDetails(@Parameter(description = "NACE record",
             required = true) final @RequestBody NomenclatureEconomicActivityDto naceData) {
-        final NomenclatureEconomicActivityDto nace = dbClmService.putNaceDetails(naceData);
+        final var nace = dbClmService.putNaceDetails(naceData);
         return ResponseEntity.status(HttpStatus.CREATED).body(nace);
     }
 }

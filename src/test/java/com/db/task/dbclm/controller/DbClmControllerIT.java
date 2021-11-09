@@ -3,7 +3,10 @@ package com.db.task.dbclm.controller;
 import com.db.task.dbclm.NaceDataHelper;
 import com.db.task.dbclm.dto.NomenclatureEconomicActivityDto;
 import com.db.task.dbclm.exception.ApiError;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +22,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DbClmControllerIT {
 
     private final String nace_uri = "http://localhost:8080/v1/nomenclatures/";
@@ -27,6 +31,7 @@ public class DbClmControllerIT {
     private TestRestTemplate restTemplate;
 
     @Test
+    @Order(1)
     public void testPutNaceDetails_NACE_Created() {
         var nace = NaceDataHelper.NACE_398488;
         var response = this.restTemplate.postForEntity(nace_uri,
@@ -43,6 +48,7 @@ public class DbClmControllerIT {
     }
 
     @Test
+    @Order(2)
     public void testPutNaceDetails_InvalidInput() {
         var invalidNace = new NomenclatureEconomicActivityDto();
         var response = this.restTemplate.postForEntity(nace_uri,
@@ -69,6 +75,24 @@ public class DbClmControllerIT {
     }
 
     @Test
+    @Order(3)
+    public void testGetNaceDetails_NACE_Found_FromCache() {
+        var order = 398488L;
+        ResponseEntity<NomenclatureEconomicActivityDto> response = this.restTemplate.getForEntity(nace_uri + order,
+                NomenclatureEconomicActivityDto.class);
+
+        NomenclatureEconomicActivityDto nace = NaceDataHelper.NACE_398488;
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        NomenclatureEconomicActivityDto naceResponse = response.getBody();
+        assertNotNull(naceResponse);
+        assertEquals(nace.getOrder(), naceResponse.getOrder());
+        assertEquals(nace.getDescription(), naceResponse.getDescription());
+        assertEquals(nace.getCode(), naceResponse.getCode());
+        assertEquals(nace.getItemIncludes(), naceResponse.getItemIncludes());
+    }
+
+    @Test
+    @Order(4)
     public void testGetNaceDetails_NACE_NotFound() {
         var order = 123466L;
         ResponseEntity<ApiError> response = this.restTemplate.getForEntity(nace_uri + order,
@@ -78,9 +102,10 @@ public class DbClmControllerIT {
     }
 
     @Test
+    @Order(5)
     public void testGetNaceDetails_InvalidInput() {
         var order = "invalidinput";
-        ResponseEntity<ApiError> response = this.restTemplate.getForEntity(nace_uri+order,
+        ResponseEntity<ApiError> response = this.restTemplate.getForEntity(nace_uri + order,
                 ApiError.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
