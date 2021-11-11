@@ -13,7 +13,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .components(new Components())
-                .info(new Info().title("Contact DB ClM API").description(
+                .info(new Info().title("Contact DB CLM").description(
                         "This is a db-clm service to manage the NACE Details"));
     }
 }

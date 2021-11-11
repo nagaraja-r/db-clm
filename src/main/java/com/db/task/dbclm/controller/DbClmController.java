@@ -33,7 +33,7 @@ public class DbClmController {
         this.dbClmService = dbClmService;
     }
 
-    @Operation(summary = "Find NACE details by order", description = "Returns the set of NACE for a given order",
+    @Operation(summary = "Find NACE Details by order", description = "Returns a NACE record for the given order",
             tags = {"db-clm"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation",
@@ -56,7 +56,7 @@ public class DbClmController {
             MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<NomenclatureEconomicActivityDto> putNaceDetails(@Parameter(description = "NACE record",
             required = true) final @RequestBody NomenclatureEconomicActivityDto naceData) {
-        final NomenclatureEconomicActivityDto nace = dbClmService.putNaceDetails(naceData);
+        final var nace = dbClmService.putNaceDetails(naceData);
         return ResponseEntity.status(HttpStatus.CREATED).body(nace);
     }
 }
